@@ -58,20 +58,16 @@ bool BrainControl::init()
 	//ÄÔ²¨Ïà¹Ø
 	_Attention = 0;
 	_PoolSignal = 0;
-	_Attack = 0;
-
-	scheduleUpdate();
-
+	_Attack = 30;
 	return true;
 }
 
-void BrainControl::update(float dt)
+void BrainControl::Brain()
 {
-#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	int iAttention = 0;
 	int iPoolSignal = 0;
 	int iBlink = 0;
-
+#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	//void doStuff();
 	int getAttention();
 	int getPoorSignal();
@@ -83,9 +79,7 @@ void BrainControl::update(float dt)
 	iAttention = getAttention();
 	_Attack = iAttention;
 #else
-	int iAttention = 50;
-	int iPoolSignal = 50;
-	int iBlink = 1;
+	iAttention = 100;
 #endif
 	if (_PoolSignal > 100 - iPoolSignal / 2)
 		_PoolSignal--;
@@ -94,7 +88,7 @@ void BrainControl::update(float dt)
 	progress2->setPercentage(_PoolSignal);
 
 	//ÅÐ¶ÏÐÅºÅ
-	if (iPoolSignal < 10)
+	if (_PoolSignal < 10)
 		return;
 
 	if (iAttention < 5)
